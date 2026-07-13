@@ -8,8 +8,9 @@
                          carries a blue undertone without anything being "blue" */
   --dim:   #6a8695;
   --sun:   #ffc93c;
-  --sea:   #7fc7dd;
   --coral: #ff6b4a;
+
+  --wave-h: clamp(96px, 15vh, 160px);
 }
 
 * { box-sizing: border-box; }
@@ -20,7 +21,9 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: clamp(34px, 6vh, 68px);
-  padding: clamp(40px, 8vh, 88px) clamp(22px, 6vw, 56px);
+  /* The extra bottom padding is the wave's height — otherwise, on a short page,
+     the footer lands in the water. */
+  padding: clamp(40px, 8vh, 88px) clamp(22px, 6vw, 56px) calc(var(--wave-h) + 28px);
   background: var(--sand);
   color: var(--ink);
   /* No web fonts — the CSP is `default-src 'self'`, which blocks them outright.
@@ -34,27 +37,33 @@ body {
 
 /* Two flat shapes, and that is the entire illustration. No blur, no glow: they
    read as SHAPES rather than light sources, which is what makes it a poster
-   instead of a photograph. The sun is loud; the sea is quiet and just cools the
-   bottom-left so the page isn't warm in every corner. */
+   rather than a photograph. Sun above, sea below; the page sits between them. */
 body::before,
 body::after {
   content: "";
   position: fixed;
-  border-radius: 50%;
   z-index: -1;
 }
 
 body::before {                    /* the sun */
   top: -130px; right: -100px;
   width: 380px; height: 380px;
+  border-radius: 50%;
   background: var(--sun);
 }
 
-body::after {                     /* the sea */
-  bottom: -190px; left: -140px;
-  width: 460px; height: 460px;
-  background: var(--sea);
-  opacity: .28;
+/* The sea. An inline SVG data-URI rather than CSS shapes, because a wave built
+   out of border-radius is always visibly a stack of ellipses.
+   `preserveAspectRatio: none` + `background-size: 100% 100%` lets one 1440-wide
+   path stretch edge-to-edge at ANY viewport width — so it never tiles, never
+   repeats, and never leaves a gap on an ultrawide monitor.
+   Two paths, pale behind and deeper in front: the only depth cue in the design,
+   and it stays completely flat. */
+body::after {
+  left: 0; right: 0; bottom: 0;
+  height: var(--wave-h);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 160' preserveAspectRatio='none'%3E%3Cpath d='M0,92 C180,32 340,138 620,94 C900,50 1130,148 1440,84 L1440,160 L0,160 Z' fill='%23bfe6f0'/%3E%3Cpath d='M0,124 C200,72 420,166 700,120 C980,74 1210,158 1440,112 L1440,160 L0,160 Z' fill='%237fc7dd'/%3E%3C/svg%3E") no-repeat;
+  background-size: 100% 100%;
 }
 
 header h1 {
