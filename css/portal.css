@@ -1,0 +1,121 @@
+/* sunair.fun — the front door.
+   Deliberately plain. It's a shelf, not a shop window: the games are the thing,
+   and anything the shelf does to draw attention it takes from them. */
+
+:root {
+  color-scheme: dark;
+  --ink: #f2ece4;
+  --dim: #8f98ad;
+  --line: #2c3240;
+  --red: #c8433f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 40px;
+  padding: clamp(28px, 6vw, 72px) clamp(20px, 5vw, 48px);
+  background: #0d0f14;
+  color: var(--ink);
+  font: 16px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+header h1 {
+  margin: 0;
+  font-size: clamp(24px, 4vw, 38px);
+  letter-spacing: -0.01em;
+}
+
+header h1 span { color: var(--red); }
+
+header p {
+  margin: 6px 0 0;
+  color: var(--dim);
+  font-size: 13px;
+}
+
+main { width: 100%; max-width: 780px; }
+
+.games {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+
+.game {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: clamp(14px, 3vw, 28px);
+  align-items: center;
+  padding: 22px clamp(16px, 3vw, 26px);
+  text-decoration: none;
+  color: inherit;
+  background: #141821;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
+}
+
+.game:hover,
+.game:focus-visible {
+  border-color: var(--red);
+  background: #171c26;
+  transform: translateY(-2px);
+  outline: none;
+}
+
+/* Native 584x130. Only ever scaled DOWN — its edges are anti-aliased, so
+   `pixelated` would show ragged alpha rather than clean blocks. */
+.game-art {
+  width: clamp(160px, 26vw, 280px);
+  height: auto;
+}
+
+.game-blurb {
+  color: var(--dim);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.game-go {
+  color: var(--dim);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.game:hover .game-go { color: var(--red); }
+
+/* Three columns of anything is a mess at 380px wide. */
+@media (max-width: 620px) {
+  .game {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 12px;
+  }
+}
+
+/* The empty state. Disappears BY ITSELF the moment a real game is uncommented,
+   so publishing CluColor is deleting two comment markers and nothing else —
+   no second edit to remember on the 21st, and no way to ship a live game with
+   "Soon." still sitting under it. */
+.soon {
+  margin: 0;
+  color: #5a637a;
+  font-size: 13px;
+}
+
+.games:has(.game) ~ .soon { display: none; }
+
+footer p {
+  margin: 0;
+  color: #5a637a;
+  font-size: 12px;
+}
