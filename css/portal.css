@@ -1,13 +1,15 @@
 /* sunair.fun — the front door.
-   Deliberately plain. It's a shelf, not a shop window: the games are the thing,
-   and anything the shelf does to draw attention it takes from them. */
+   A poster, not a shop window: flat colour, hard shapes, no gloss. The games are
+   the thing, and anything the shelf does to draw attention it takes from them. */
 
 :root {
-  color-scheme: dark;
-  --ink: #f2ece4;
-  --dim: #8f98ad;
-  --line: #2c3240;
-  --red: #c8433f;
+  --sand:  #fdf3e0;   /* the page */
+  --ink:   #1b3a4b;   /* deep sea-blue, not black — every border and letter
+                         carries a blue undertone without anything being "blue" */
+  --dim:   #6a8695;
+  --sun:   #ffc93c;
+  --sea:   #7fc7dd;
+  --coral: #ff6b4a;
 }
 
 * { box-sizing: border-box; }
@@ -17,105 +19,145 @@ body {
   min-height: 100dvh;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 40px;
-  padding: clamp(28px, 6vw, 72px) clamp(20px, 5vw, 48px);
-  background: #0d0f14;
+  gap: clamp(34px, 6vh, 68px);
+  padding: clamp(40px, 8vh, 88px) clamp(22px, 6vw, 56px);
+  background: var(--sand);
   color: var(--ink);
-  font: 16px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* No web fonts — the CSP is `default-src 'self'`, which blocks them outright.
+     ui-rounded resolves to SF Rounded on Apple platforms and degrades to a
+     friendly system sans everywhere else. Zero network requests, soft feel. */
+  font: 17px/1.6 ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Two flat shapes, and that is the entire illustration. No blur, no glow: they
+   read as SHAPES rather than light sources, which is what makes it a poster
+   instead of a photograph. The sun is loud; the sea is quiet and just cools the
+   bottom-left so the page isn't warm in every corner. */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+body::before {                    /* the sun */
+  top: -130px; right: -100px;
+  width: 380px; height: 380px;
+  background: var(--sun);
+}
+
+body::after {                     /* the sea */
+  bottom: -190px; left: -140px;
+  width: 460px; height: 460px;
+  background: var(--sea);
+  opacity: .28;
 }
 
 header h1 {
   margin: 0;
-  font-size: clamp(24px, 4vw, 38px);
-  letter-spacing: -0.01em;
+  font-size: clamp(44px, 9vw, 84px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
 }
 
-header h1 span { color: var(--red); }
+header h1 span { color: var(--coral); }
 
 header p {
-  margin: 6px 0 0;
+  margin: 14px 0 0;
   color: var(--dim);
-  font-size: 13px;
+  font-size: 17px;
 }
 
-main { width: 100%; max-width: 780px; }
+main { width: 100%; max-width: 800px; }
 
 .games {
   margin: 0;
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 14px;
+  gap: 20px;
 }
 
+/* The hard offset shadow IS the style. On hover the card presses INTO it — it
+   travels exactly as far as the shadow shrinks, so it reads as a physical button
+   being pushed rather than a rectangle sliding around. */
 .game {
   display: grid;
   grid-template-columns: auto 1fr auto;
-  gap: clamp(14px, 3vw, 28px);
+  gap: clamp(18px, 3.5vw, 34px);
   align-items: center;
-  padding: 22px clamp(16px, 3vw, 26px);
+  padding: 26px clamp(20px, 3vw, 30px);
   text-decoration: none;
   color: inherit;
-  background: #141821;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
+  background: #fffdf8;
+  border: 2.5px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 var(--ink);
+  transition: transform .12s ease, box-shadow .12s ease;
 }
 
 .game:hover,
 .game:focus-visible {
-  border-color: var(--red);
-  background: #171c26;
-  transform: translateY(-2px);
+  transform: translate(6px, 6px);
+  box-shadow: 0 0 0 var(--ink);
   outline: none;
 }
 
 /* Native 584x130. Only ever scaled DOWN — its edges are anti-aliased, so
-   `pixelated` would show ragged alpha rather than clean blocks. */
+   `image-rendering: pixelated` would show ragged alpha rather than clean blocks. */
 .game-art {
-  width: clamp(160px, 26vw, 280px);
+  width: clamp(150px, 24vw, 250px);
   height: auto;
 }
 
 .game-blurb {
   color: var(--dim);
-  font-size: 13px;
-  line-height: 1.65;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .game-go {
-  color: var(--dim);
-  font-size: 12px;
-  letter-spacing: 0.1em;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--coral);
   white-space: nowrap;
-}
-
-.game:hover .game-go { color: var(--red); }
-
-/* Three columns of anything is a mess at 380px wide. */
-@media (max-width: 620px) {
-  .game {
-    grid-template-columns: 1fr;
-    justify-items: start;
-    gap: 12px;
-  }
+  text-transform: uppercase;
+  letter-spacing: .06em;
 }
 
 /* The empty state. Disappears BY ITSELF the moment a real game is uncommented,
-   so publishing CluColor is deleting two comment markers and nothing else —
-   no second edit to remember on the 21st, and no way to ship a live game with
+   so publishing CluColor is deleting two comment markers and nothing else — no
+   second edit to remember on the 21st, and no way to ship a live game with
    "Soon." still sitting under it. */
 .soon {
   margin: 0;
-  color: #5a637a;
-  font-size: 13px;
+  color: var(--dim);
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .games:has(.game) ~ .soon { display: none; }
 
 footer p {
   margin: 0;
-  color: #5a637a;
-  font-size: 12px;
+  color: #90a6b1;
+  font-size: 14px;
+}
+
+/* Three columns of anything is a mess at 380px wide. */
+@media (max-width: 640px) {
+  .game {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
 }
