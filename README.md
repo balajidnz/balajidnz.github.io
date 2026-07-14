@@ -16,20 +16,25 @@ So:
 | repo | serves |
 |---|---|
 | `balajidnz.github.io` (this one, holds the `CNAME`) | `sunair.fun` |
-| any game repo (**no CNAME**) | `sunair.fun/<repo>/` |
+| any game repo (**no CNAME**) | `sunair.fun/<repo-name>/` |
 
 **Adding a game is: make a repo, turn Pages on, add an `<li>` here.** Nothing else.
 
-## Two things that will bite you
+Two things that bite, both learned the hard way:
+**only ONE repo may hold a `CNAME`** (two and they fight over the domain), and the
+**repo name IS the URL and URLs are case-sensitive** — so name repos in lowercase, or every
+link you have already sent out will 404.
 
-**Only ONE repo may hold a `CNAME` file — this one.** If a game repo also has one, the two
-fight over the domain and one of them wins at random.
+## Why no games are listed
 
-**The repo name IS the URL, and URLs are case-sensitive.** A repo named `foo` gives you `sunair.fun/foo/`;
-`Foo` would give you `sunair.fun/Foo/`, and every link already sent out would 404.
-Lowercase everything.
+Not an oversight. The first game is deployed but deliberately **unlinked**, and its markup is
+kept **out of `index.html` entirely** rather than commented out — a commented-out `<a href>`
+is still shipped to every visitor, and anyone opening view-source reads the URL it was
+supposed to be hiding. **A comment is not a secret.**
 
-## DNS
+The empty-state block in `index.html` removes itself automatically once a real game exists
+(`body:has(.game) .empty`), so publishing is: add the `<li>`, add the artwork, push.
 
-Unchanged — it already points at GitHub. The four `A` records, four `AAAA` records and the
-`www` CNAME stay exactly as they are; only *which repo* holds the `CNAME` file changes.
+## Contact
+
+hello@sunair.fun — a real mailbox, with SPF, DKIM and DMARC.
