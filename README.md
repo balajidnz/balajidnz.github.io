@@ -19,17 +19,3 @@ So:
 | `clucolor` (**no CNAME**) | `sunair.fun/clucolor/` |
 
 **Adding a game is: make a repo, turn Pages on, add an `<li>` here.** Nothing else.
-
-## Two things that will bite you
-
-**Only ONE repo may hold a `CNAME` file — this one.** If a game repo also has one, the two
-fight over the domain and one of them wins at random.
-
-**The repo name IS the URL, and URLs are case-sensitive.** `clucolor` gives you
-`sunair.fun/clucolor/`. `CluColor` would give you `sunair.fun/CluColor/`, and every link
-already sent out would 404. Lowercase everything.
-
-## DNS
-
-Unchanged — it already points at GitHub. The four `A` records, four `AAAA` records and the
-`www` CNAME stay exactly as they are; only *which repo* holds the `CNAME` file changes.
