@@ -18,9 +18,12 @@
 body {
   margin: 0;
   min-height: 100dvh;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: clamp(34px, 6vh, 68px);
+  /* Flex, not grid-template-rows. The pages have different numbers of children,
+     and a fixed row template silently assigns 1fr to whichever child happens to
+     land in slot two. */
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 5vh, 56px);
   /* The extra bottom padding is the wave's height — otherwise, on a short page,
      the footer lands in the water. */
   padding: clamp(40px, 8vh, 88px) clamp(22px, 6vw, 56px) calc(var(--wave-h) + 28px);
@@ -37,11 +40,18 @@ body {
 
 /* Two flat shapes, and that is the entire illustration. No blur, no glow: they
    read as SHAPES rather than light sources, which is what makes it a poster
-   rather than a photograph. Sun above, sea below; the page sits between them. */
+   rather than a photograph. Sun above, sea below; the page sits between them.
+
+   ABSOLUTE, not fixed. Fixed pins them to the VIEWPORT, so on any page long
+   enough to scroll (/about, /privacy) the text slid underneath the water and the
+   sun hung in the middle of a paragraph. Absolute pins them to the PAGE: the sun
+   is at the top of the document and the sea is at the bottom of it, wherever that
+   falls. The layout is a poster, so its shapes belong to the poster, not to the
+   window you happen to be looking through. */
 body::before,
 body::after {
   content: "";
-  position: fixed;
+  position: absolute;
   z-index: -1;
 }
 
@@ -139,18 +149,113 @@ main { width: 100%; max-width: 800px; }
   letter-spacing: .06em;
 }
 
-/* The empty state. Disappears BY ITSELF the moment a real game is uncommented,
-   so publishing CluColor is deleting two comment markers and nothing else — no
-   second edit to remember on the 21st, and no way to ship a live game with
-   "Soon." still sitting under it. */
-.soon {
-  margin: 0;
-  color: var(--dim);
-  font-size: 16px;
-  font-weight: 600;
+/* ---- the empty state, which is also the copy --------------------------------
+
+   Drawn as an EMPTY CARD SLOT: the same size, radius and border-weight as a real
+   game card, but dashed and unfilled. It occupies the space the first game will
+   take, so the page reads as composed-and-waiting rather than broken-and-empty —
+   and it carries the prose that stops an automated classifier reading the domain
+   as parked.
+
+   It removes itself the instant a real game exists. From then on the description
+   lives only on /about.html.
+   --------------------------------------------------------------------------- */
+
+.empty {
+  padding: clamp(30px, 5vw, 44px) clamp(22px, 3.5vw, 34px);
+  border: 2.5px dashed #c9b89a;   /* sand, darkened — reads as a pencil outline */
+  border-radius: 18px;
+  max-width: 560px;
 }
 
-.games:has(.game) ~ .soon { display: none; }
+.empty-lead {
+  margin: 0;
+  font-size: clamp(21px, 3vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.empty-sub {
+  margin: 10px 0 0;
+  color: var(--dim);
+  font-size: 15.5px;
+  line-height: 1.65;
+}
+
+.empty-soon {
+  margin: 20px 0 0;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--coral);
+}
+
+/* The whole block is scaffolding. When there's a game, it goes. */
+body:has(.game) .empty { display: none; }
+
+/* ---- prose: /about and /privacy --------------------------------------------- */
+
+/* Tight on purpose. These pages exist to be READ ONCE and believed — a policy you
+   have to scroll through twice is a policy nobody finishes. */
+.prose {
+  max-width: 640px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.prose p { margin: 0 0 12px; color: #46626f; }
+
+.prose h2 {
+  margin: 26px 0 8px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.prose b { color: var(--ink); }
+
+.prose code {
+  background: #fffdf8;
+  border: 1.5px solid var(--ink);
+  border-radius: 5px;
+  padding: 1px 6px;
+  font-size: 14px;
+}
+
+.prose .updated {
+  margin-top: 34px;
+  font-size: 14px;
+  color: #90a6b1;
+}
+
+/* One link style everywhere: coral, and underlined on hover. Links in body text
+   must not rely on colour alone to be findable. */
+.prose a,
+.empty a,
+footer a {
+  color: var(--coral);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.prose a:hover, .prose a:focus-visible,
+footer a:hover, footer a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* The wordmark doubles as the home link on the sub-pages. */
+h1 a.home {
+  color: inherit;
+  text-decoration: none;
+}
+
+footer {
+  margin-top: auto;   /* pin to the bottom on short pages */
+}
 
 footer p {
   margin: 0;

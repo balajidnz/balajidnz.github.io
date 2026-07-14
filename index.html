@@ -6,7 +6,7 @@
 <meta http-equiv="content-security-policy"
       content="default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>sunair.fun</title>
-<meta name="description" content="Small things, made carefully.">
+<meta name="description" content="Short browser games. Free, no ads, no accounts, nothing to install.">
 <link rel="icon" href="img/favicon.png">
 <link rel="stylesheet" href="css/portal.css">
 </head>
@@ -24,11 +24,6 @@
 
          The game IS live at /clucolor/ — this entry is the only thing that
          links to it. Deleting these two comment markers publishes it.
-
-         It stays hidden because the portal is the one crawlable path to the
-         game, and the game's own index.html carries `noindex, nofollow`.
-         Together: it is not indexed, and it is not linked. It is reachable
-         only by someone typing the exact URL.
          =================================================================== -->
     <!--
     <li>
@@ -46,11 +41,24 @@
     <!-- The next one goes here. -->
   </ul>
 
-  <p class="soon">Soon.</p>
+  <!-- The empty state IS the copy.
+       Two jobs, one element. It sits in the slot the first game will occupy,
+       drawn as an empty card, so the page looks composed rather than unfinished.
+       And it carries real prose — a page with no words on it is indistinguishable
+       from a parked domain to an automated classifier, which is how this site got
+       rated Malware while it said nothing but "Soon."
+       It hides itself the moment a game exists (see `body:has(.game)`), and from
+       then on the description lives only on /about.html. -->
+  <div class="empty">
+    <p class="empty-lead">Short browser games.</p>
+    <p class="empty-sub">Free. No ads, no accounts, nothing to install — they run in
+      your browser and vanish when you close the tab.</p>
+    <p class="empty-soon">The first one lands soon.</p>
+  </div>
 </main>
 
 <footer>
-  <p>made by Rico 🧸</p>
+  <p>made by Rico 🧸 &nbsp;·&nbsp; <a href="/about.html">about</a> &nbsp;·&nbsp; <a href="/privacy.html">privacy</a> &nbsp;·&nbsp; <a href="https://github.com/balajidnz">source</a></p>
 </footer>
 
 </body>
