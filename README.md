@@ -16,7 +16,7 @@ So:
 | repo | serves |
 |---|---|
 | `balajidnz.github.io` (this one, holds the `CNAME`) | `sunair.fun` |
-| `clucolor` (**no CNAME**) | `sunair.fun/clucolor/` |
+| any game repo (**no CNAME**) | `sunair.fun/<repo>/` |
 
 **Adding a game is: make a repo, turn Pages on, add an `<li>` here.** Nothing else.
 
@@ -25,9 +25,9 @@ So:
 **Only ONE repo may hold a `CNAME` file — this one.** If a game repo also has one, the two
 fight over the domain and one of them wins at random.
 
-**The repo name IS the URL, and URLs are case-sensitive.** `clucolor` gives you
-`sunair.fun/clucolor/`. `CluColor` would give you `sunair.fun/CluColor/`, and every link
-already sent out would 404. Lowercase everything.
+**The repo name IS the URL, and URLs are case-sensitive.** A repo named `foo` gives you `sunair.fun/foo/`;
+`Foo` would give you `sunair.fun/Foo/`, and every link already sent out would 404.
+Lowercase everything.
 
 ## DNS
 
